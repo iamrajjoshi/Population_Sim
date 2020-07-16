@@ -1,5 +1,6 @@
 #ifndef Immigrant_Generator_h
 #define Immigrant_Generator_h
+
 #include "Common.h"
 
 class Immigrant_Generator {
@@ -16,4 +17,4 @@ public:
     double rng(double, double);
 };
 
-#endif /* Immigrant_Generator_h */
+#endif

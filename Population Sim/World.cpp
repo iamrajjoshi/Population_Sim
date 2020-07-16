@@ -1,9 +1,8 @@
 #include "World.h"
 
-
-World::World(double alpha, double beta, double birthrate, double constant_of_influence, unsigned int immigration_rate, unsigned int dim, double m, string name) :
+World::World(double alpha, double beta, double birthrate, double constant_of_influence, unsigned int immigration_rate, unsigned int dim, double m, string fileName) :
     generator(immigration_rate, dim, birthrate), a(alpha), b(beta),
-    c0(constant_of_influence), date(0), m(m), totalPopulation(0), totalCities(0), averageFitness(0), outFileName(name) {
+    c0(constant_of_influence), date(0), m(m), totalPopulation(0), totalCities(0), averageFitness(0), outFileName(fileName) {
 };
 
 void World::initializeSimulation() {
@@ -48,7 +47,6 @@ void World::advanceAge() {
             if (cities[i].adults[j].age > calculateLifeExpectancy(i)) {
                 aod = double((aod * caod + cities[i].adults[j].age)) / (caod + 1);
                 //aod=(aod*caod+cities[i].adults[j].age)/(caod+1);
-                int temp = cities[i].adults[j].age;
                 caod++;
                 cities[i].cityAgeofDeath = double((cities[i].cityAgeofDeath * cities[i].AODcity + cities[i].adults[j].age)) / (cities[i].AODcity + 1);
                 cities[i].AODcity++;
@@ -250,9 +248,6 @@ void World::advanceMovingMechanic() {
         temp = temp + to_string(places[i]) + ",";
     temp.pop_back();
     movplace.push_back(temp);
-    //SET TOTAL ADULTS FOR EACH CITY
-    //SET AVERAGE ADULT AGE FOR EACH CITY
-    //SET TOTAL POPULATION
     for (int i = 0; i < cities.size(); ++i) {
         cities[i].totalAdults = cities[i].adults.size();
         if (cities[i].totalAdults == 0)

@@ -1,7 +1,8 @@
 #include "World.h"
+#include "Threadpool.h"
 
-void simRunner(double a, double b, double c, double d, double e, double f, double g, string fileName) {
-    World w(a, b, c, d, e, f, g, fileName);
+void simRunner(double alpha, double beta, double birthrate, double constant_of_influence, unsigned int immigration_rate, unsigned int dim, double m, string fileName) {
+    World w(alpha, beta, birthrate, constant_of_influence, immigration_rate, dim, m, fileName);
     w.advanceSimulation(500);
     return;
 }
@@ -13,11 +14,11 @@ int main() {
     ifstream myfile;
     myfile.open("G:\\My Drive\\Projects\\Research Project\\general7\\general7.txt");
     for (int i = 0; i < 1; i++) {
-        double a, b, c, d, e, f, g;
-        myfile >> a >> b >> c >> d >> e >> f >> g;
+        double alpha, beta, birthrate, constant_of_influence,  immigration_rate, dim,  m;
+        myfile >> alpha >> beta >> birthrate >> constant_of_influence >> immigration_rate >> dim >> m;
         
         string fileName = "out" + to_string(i + 134) + ".csv";
-        futs.push_back(tp.submit(bind(&simRunner, a, b, c, d, e, f, g, fileName)));
+        futs.push_back(tp.submit(bind(&simRunner, alpha, beta, birthrate, constant_of_influence, immigration_rate, dim, m, fileName)));
     }
     myfile.close();
 

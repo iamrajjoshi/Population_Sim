@@ -1,5 +1,6 @@
 #ifndef Common_h
 #define Common_h
+
 #include <iostream>
 #include <math.h>
 #include <vector>
@@ -44,4 +45,4 @@ struct City {
     };
 };
 
-#endif /* Common_h */
+#endif

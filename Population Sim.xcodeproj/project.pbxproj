@@ -32,6 +32,7 @@
 		303394BD24C0B3230088B0AA /* World.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = World.h; sourceTree = "<group>"; };
 		303394BE24C0B3680088B0AA /* World.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = World.cpp; sourceTree = "<group>"; };
 		303394C224C0B4240088B0AA /* Immigrant_Generator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Immigrant_Generator.cpp; sourceTree = "<group>"; };
+		303394C524C1089E0088B0AA /* Threadpool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Threadpool.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,9 +68,10 @@
 				303394B424C0AFE10088B0AA /* main.cpp */,
 				303394BB24C0B21E0088B0AA /* Common.h */,
 				303394BC24C0B2F70088B0AA /* Immigrant_Generator.h */,
+				303394C224C0B4240088B0AA /* Immigrant_Generator.cpp */,
 				303394BD24C0B3230088B0AA /* World.h */,
 				303394BE24C0B3680088B0AA /* World.cpp */,
-				303394C224C0B4240088B0AA /* Immigrant_Generator.cpp */,
+				303394C524C1089E0088B0AA /* Threadpool.h */,
 			);
 			path = "Population Sim";
 			sourceTree = "<group>";

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		303394B524C0AFE10088B0AA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 303394B424C0AFE10088B0AA /* main.cpp */; };
+		303394BF24C0B3680088B0AA /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 303394BE24C0B3680088B0AA /* World.cpp */; };
+		303394C324C0B4240088B0AA /* Immigrant_Generator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 303394C224C0B4240088B0AA /* Immigrant_Generator.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +27,11 @@
 /* Begin PBXFileReference section */
 		303394B124C0AFE10088B0AA /* Population Sim */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Population Sim"; sourceTree = BUILT_PRODUCTS_DIR; };
 		303394B424C0AFE10088B0AA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		303394BB24C0B21E0088B0AA /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
+		303394BC24C0B2F70088B0AA /* Immigrant_Generator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Immigrant_Generator.h; sourceTree = "<group>"; };
+		303394BD24C0B3230088B0AA /* World.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = World.h; sourceTree = "<group>"; };
+		303394BE24C0B3680088B0AA /* World.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = World.cpp; sourceTree = "<group>"; };
+		303394C224C0B4240088B0AA /* Immigrant_Generator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Immigrant_Generator.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +65,11 @@
 			isa = PBXGroup;
 			children = (
 				303394B424C0AFE10088B0AA /* main.cpp */,
+				303394BB24C0B21E0088B0AA /* Common.h */,
+				303394BC24C0B2F70088B0AA /* Immigrant_Generator.h */,
+				303394BD24C0B3230088B0AA /* World.h */,
+				303394BE24C0B3680088B0AA /* World.cpp */,
+				303394C224C0B4240088B0AA /* Immigrant_Generator.cpp */,
 			);
 			path = "Population Sim";
 			sourceTree = "<group>";
@@ -119,6 +131,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				303394C324C0B4240088B0AA /* Immigrant_Generator.cpp in Sources */,
+				303394BF24C0B3680088B0AA /* World.cpp in Sources */,
 				303394B524C0AFE10088B0AA /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -132,7 +146,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -190,7 +204,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;

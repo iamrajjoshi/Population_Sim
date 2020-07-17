@@ -16,13 +16,13 @@ int main() {
     thread_pool tp(4);
     vector<future<void>> futs;
     ifstream myfile;
-    myfile.open("/Users/rj/Desktop/general7.txt");
-    for (int i = 0; i < 1; i++) {
+    myfile.open("/Users/rj/Desktop/cases.txt");
+    for (int i = 0; i < 16; i++) {
         double alpha, beta, birthrate, constant_of_influence,  immigration_rate, dim,  moving;
         myfile >> alpha >> beta >> birthrate >> constant_of_influence >> immigration_rate >> dim >> moving;
         
-        string fileName = "/Users/rj/Desktop/out" + to_string(i) + ".csv";
-        futs.push_back(tp.submit(bind(&simRunner, i, alpha, beta, birthrate, constant_of_influence, immigration_rate, dim, moving, fileName, 100)));
+        string fileName = "/Users/rj/Desktop/CASE" + to_string(i) + ".csv";
+        futs.push_back(tp.submit(bind(&simRunner, i, alpha, beta, birthrate, constant_of_influence, immigration_rate, dim, moving, fileName, 500)));
     }
     myfile.close();
     

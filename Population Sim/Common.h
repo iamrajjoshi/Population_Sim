@@ -19,7 +19,7 @@
 #include <future>
 #include <queue>
 using namespace std;
-
+using namespace std::chrono;
 struct Person {
     unsigned int age;
     unsigned int fitness;

@@ -1,8 +1,11 @@
 #include "Immigrant_Generator.h"
 
 Immigrant_Generator::Immigrant_Generator(double c, unsigned int dim, double br) : c(c), dim(dim), birthrate(br),
-mt_rand(chrono::high_resolution_clock::now().time_since_epoch().count()) {};
+mt_rand((unsigned int)chrono::high_resolution_clock::now().time_since_epoch().count()) {};
 
+double  Immigrant_Generator::getC() { return this->c; }
+
+unsigned int Immigrant_Generator::getDim() { return this->dim; }
 
 vector <pair<double, double>> Immigrant_Generator::spawnImmigrants() {
     vector < pair<double, double>> out;

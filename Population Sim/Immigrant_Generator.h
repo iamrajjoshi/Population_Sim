@@ -9,6 +9,8 @@ private:
     unsigned int dim;
     mt19937 mt_rand;
 public:
+    double getC();
+    unsigned int getDim();
     double birthrate;
     double kidProbability();
     Immigrant_Generator(double, unsigned int, double);

@@ -85,77 +85,97 @@ unsigned int World::calculateLifeExpectancy(unsigned int index) {
 void World::advanceImmigrantMechanic() {
     //assigning immigrants to a city
     vector <pair<double, double>> immigrants(generator.spawnImmigrants());
-    vector <unsigned int> places(cities.size(),0);
+    // vector <unsigned int> places(cities.size(),0);
     for (int i = 0; i < immigrants.size(); ++i) {
         
         vector<double> influences;
         for (int j = 0; j < this->cities.size(); ++j)
             influences.push_back(calculateInfluence(j, immigrants[i]));
         
-        long double total_influence = accumulate(influences.begin(), influences.end(), 0.0);
+        double total_influence = accumulate(influences.begin(), influences.end(), 0.0);
+        total_influence += 1/total_influence;
         if (isnan(total_influence)) {
-            cout << "WE HAVE A BOOBOO" << endl;
+            cout << "ERROR: TOTAL INFLUENCE IS NAN" << endl;
+            cout << "WRITING CURRENT DATA TO: " << this->outFileName << endl;
             writeFile();
             return;
         }
         totalCities = (unsigned int)cities.size();
         vector<double> probabilities(totalCities + 1, 0);
         
-        probabilities[0] = 1;
-        double baseline = 1 / total_influence;
-        long double temp = 0.0;
-        for (int j = 1; j < (influences.size() + 1); ++j) {
-            //cout << total_influence << endl;
-            long double aryval = influences[j - 1];
-            temp = aryval;
-            baseline += temp;
-            probabilities[j] = baseline;
+        /*
+         probabilities[0] = 1;
+         double baseline = 1 / total_influence;
+         long double temp = 0.0;
+         for (int j = 1; j < (influences.size() + 1); ++j) {
+         long double aryval = influences[j - 1];
+         temp = aryval;
+         baseline += temp;
+         probabilities[j] = baseline;
+         }
+         */
+        /*  probabilities[0] = 0;
+         for(int j = 1; j < probabilities.size(); ++j) {
+         probabilities[j] = probabilities[j-1] + influences[j-1];
+         }
+         
+         if (total_influence == 0) {
+         cities.push_back(City(calculateFitness(18), 18));
+         cityCenters.push_back(immigrants[i]);
+         cities[cities.size() - 1].adults.emplace_back(Person(18, 31));
+         cities[cities.size() - 1].totalAdults++;
+         }
+         else {
+         double num = generator.rng(0, total_influence);
+         
+         for (int j = 1; j < probabilities.size(); ++j) {
+         if (j > probabilities.size()-1) {
+         if (num < probabilities[j]) {
+         cities.push_back(City(calculateFitness(18), 18));
+         cityCenters.push_back(immigrants[i]);
+         cities[cities.size() - 1].adults.emplace_back(Person(18, 31));
+         cities[cities.size() - 1].totalAdults++;
+         break;
+         }
+         }
+         else if (probabilities[j - 1] < num && probabilities[j] >= num) {
+         cities[j - 1].adults.emplace_back(Person(18, 31));
+         cities[j-1].totalAdults++;
+         break;
+         }
+         else if (num > probabilities[probabilities.size() - 1]) {
+         cities.push_back(City(calculateFitness(18), 18));
+         cityCenters.push_back(immigrants[i]);
+         cities[cities.size() - 1].adults.emplace_back(Person(18, 31));
+         cities[cities.size() - 1].totalAdults++;
+         break;
+         }
+         }
+         }*/
+        
+        probabilities[0] = 0;
+        for(int j = 1; j < probabilities.size(); ++j) {
+            probabilities[j] = probabilities[j-1] + (influences[j-1])/total_influence;
+            
         }
-        if (total_influence == 0) {
-            places.push_back(1);
+        double num = generator.rng(0, probabilities[probabilities.size()-1]+double(1/total_influence));
+        
+        if (num > probabilities[probabilities.size() - 1]) {
             cities.push_back(City(calculateFitness(18), 18));
             cityCenters.push_back(immigrants[i]);
             cities[cities.size() - 1].adults.emplace_back(Person(18, 31));
             cities[cities.size() - 1].totalAdults++;
         }
         else {
-            //cout << "   " << baseline;
-            double num = generator.rng(0, 1 + total_influence);
-            
-            for (int j = 0; j < probabilities.size(); ++j) {
-                if (j == 0) {
-                    if (num < probabilities[j]) {
-                        places.push_back(1);
-                        cities.push_back(City(calculateFitness(18), 18));
-                        cityCenters.push_back(immigrants[i]);
-                        cities[cities.size() - 1].adults.emplace_back(Person(18, 31));
-                        cities[cities.size() - 1].totalAdults++;
-                        break;
-                    }
-                }
-                else if (probabilities[j - 1] < num && probabilities[j] >= num) {
-                    places[j-1]++;
+            for (int j = 1; j < probabilities.size(); ++j)
+                if (probabilities[j - 1] < num && probabilities[j] >= num) {
                     cities[j - 1].adults.emplace_back(Person(18, 31));
                     cities[j-1].totalAdults++;
                     break;
                 }
-                else if (j == probabilities.size() - 1) {
-                    places[j - 1]++;
-                    cities[j - 1].adults.emplace_back(Person(18, 31));
-                    cities[j - 1].totalAdults++;
-                    break;
-                }
-            }
         }
-        
     }
     totalCities = (unsigned int)cities.size();
-    string temp;
-    for (int i = 0; i < places.size(); ++i)
-        temp = temp + to_string(places[i]) + ",";
-    temp.pop_back();
-    imiplace.push_back(temp);
-    
     return;
 }
 
@@ -206,7 +226,6 @@ void World::advanceFitness() {
 }
 
 void World::advanceMovingMechanic() {
-    vector <unsigned int> places(cities.size(), 0);
     vector <Person> people;
     for (int i = 0; i < cities.size(); ++i) {
         for (int j = 0; j < cities[i].adults.size(); ++j) {
@@ -219,7 +238,6 @@ void World::advanceMovingMechanic() {
         }
     }
     
-    
     vector<double> probabilities(totalCities, 0);
     double baseline = 0;
     
@@ -229,34 +247,21 @@ void World::advanceMovingMechanic() {
         probabilities[j] = baseline;
     }
     
-    
-    
     for (int i = 0; i < people.size(); ++i) {
         double num = generator.rng(0, baseline);
         for (int j = 0; j < probabilities.size(); ++j) {
-            if (j == 0) {
-                if (num < probabilities[j]) {
-                    places[j]++;
-                    cities[j].adults.emplace_back(people[i]);
-                }
-            }
-            else if (probabilities[j - 1] < num && probabilities[j] >= num) {
-                places[j]++;
+            if (j == 0 && num < probabilities[j])
                 cities[j].adults.emplace_back(people[i]);
-            }
+            else if (probabilities[j - 1] < num && probabilities[j] >= num)
+                cities[j].adults.emplace_back(people[i]);
         }
     }
-    string temp;
-    for (int i = 0; i < places.size(); ++i)
-        temp = temp + to_string(places[i]) + ",";
-    temp.pop_back();
-    movplace.push_back(temp);
+    
     for (int i = 0; i < cities.size(); ++i) {
         cities[i].totalAdults = (unsigned int)cities[i].adults.size();
         if (cities[i].totalAdults == 0)
             cities[i].averageAdultAge = 0;
-        else
-        {
+        else {
             cities[i].averageAdultAge = 0;
             for (int j = 0; j < cities[i].totalAdults; ++j)
                 cities[i].averageAdultAge += cities[i].adults[j].age;
@@ -273,6 +278,7 @@ void World::advanceMovingMechanic() {
     }
     return;
 }
+
 
 void World::simulate(unsigned int count) {
     initializeSimulation();

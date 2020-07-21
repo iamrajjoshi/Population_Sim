@@ -10,8 +10,6 @@ private:
     ofstream outFile;
     string outFileName;
     vector <string> data;
-    vector <string> imiplace;
-    vector <string> movplace;
     Immigrant_Generator generator;
     vector <City> cities;
     vector <pair<double, double>> cityCenters;
@@ -21,7 +19,7 @@ private:
     double c0;
     double moving;
     unsigned int date;
-    unsigned int totalCities;//after moving
+    unsigned int totalCities;
     unsigned int totalPopulation;
     double averageFitness;
     void writeFile();

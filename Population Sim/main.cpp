@@ -17,7 +17,7 @@ int main() {
     vector<future<void>> futs;
     ifstream myfile;
     myfile.open("/Users/rj/Desktop/cases.txt");
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < 1; i++) {
         double alpha, beta, birthrate, constant_of_influence,  immigration_rate, dim,  moving;
         myfile >> alpha >> beta >> birthrate >> constant_of_influence >> immigration_rate >> dim >> moving;
         

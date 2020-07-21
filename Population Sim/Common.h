@@ -18,23 +18,27 @@
 #include <mutex>
 #include <future>
 #include <queue>
+
 using namespace std;
 using namespace std::chrono;
-struct Person {
+
+class Person {
+public:
     unsigned int age;
     unsigned int fitness;
     Person(unsigned int age, unsigned int fitness) : age(age), fitness(fitness) {};
 };
 
-struct City {
+class City {
+public:
     vector <Person> adults;
     vector <Person> kids;
-    unsigned int totalPopulation;//done
-    unsigned int totalKids;//done
-    unsigned int totalAdults;//done
-    double averageFitness;//done
-    double averageAdultAge;//done
-    double averageKidAge;//done
+    unsigned int totalPopulation;
+    unsigned int totalKids;
+    unsigned int totalAdults;
+    double averageFitness;
+    double averageAdultAge;
+    double averageKidAge;
     double lifeexpectancy;
     double totalDeaths = 0;
     double cityAgeofDeath = 0;

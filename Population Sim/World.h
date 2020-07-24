@@ -5,7 +5,6 @@
 #include "Immigrant_Generator.h"
 
 class World {
-    friend class Excel_Helper;
 private:
     ofstream outFile;
     string outFileName;
@@ -13,7 +12,6 @@ private:
     Immigrant_Generator generator;
     vector <City> cities;
     vector <pair<double, double>> cityCenters;
-    //inputs
     double alpha;
     double beta;
     double c0;
@@ -30,7 +28,7 @@ private:
     unsigned int calculateFitness(unsigned int);
     void advanceMovingMechanic();
     unsigned int calculateLifeExpectancy(unsigned int);
-    double calculateInfluence(unsigned int, pair<double, double>point);
+    long double calculateInfluence(unsigned int, pair<double, double>point);
     void initializeSimulation();
     unsigned int ac,caod,totalkids;
     double aod, r[2]={0,0};

@@ -8,7 +8,7 @@ double  Immigrant_Generator::getC() { return this->c; }
 unsigned int Immigrant_Generator::getDim() { return this->dim; }
 
 vector <pair<double, double>> Immigrant_Generator::spawnImmigrants() {
-    vector < pair<double, double>> out;
+    vector <pair<double, double>> out;
     uniform_real_distribution<double> unii(0, dim);
     for (int i = 0; i < c; ++i) {
         auto x = unii(mt_rand);

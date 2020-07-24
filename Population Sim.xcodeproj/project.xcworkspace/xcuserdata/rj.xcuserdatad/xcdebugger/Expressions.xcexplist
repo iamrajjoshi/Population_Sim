@@ -3,6 +3,17 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "World::advanceMovingMechanic():World.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "World::calculateInfluence(unsigned int, std::__1::pair&lt;double, double&gt;):World.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "(c0 * pow(d, -beta))">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "World::advanceImmigrantMechanic():World.cpp">
          <PersistentStrings>
             <PersistentString

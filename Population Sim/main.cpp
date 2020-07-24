@@ -13,7 +13,7 @@ void simRunner(int i, double alpha, double beta, double birthrate, double consta
 
 int main() {
     //alpha, beta, birthrate, constant of influence rate of immigration dimensions moving mechanic
-    thread_pool tp(4);
+    thread_pool tp;
     vector<future<void>> futs;
     ifstream myfile;
     myfile.open("/Users/rj/Desktop/cases.txt");

@@ -160,17 +160,18 @@ void World::advanceFitness() {
 }
 
 void World::advanceMovingMechanic() {
-    vector <Person> people;
+    vector<pair<Person, unsigned int>> people;
+
     for (int i = 0; i < cities.size(); ++i) {
-        for (int j = 0; j < cities[i].adults.size(); ++j) {
-            if (cities[i].adults[j].fitness > (1 + (moving / 100)) * cities[i].averageFitness) {
-                people.push_back(cities[i].adults[j]);
-                cities[i].adults.erase(cities[i].adults.begin() + j);
-                j--;
-            }
-            
-        }
-    }
+           for (int j = 0; j < cities[i].adults.size(); ++j) {
+               if (cities[i].adults[j].fitness * (1 + (moving / 100)) < averageFitness) {
+                   people.push_back(make_pair(cities[i].adults[j], j));
+                   cities[i].adults.erase(cities[i].adults.begin() + j);
+                   j--;
+               }
+               
+           }
+       }
     
     vector<double> probabilities(totalCities, 0);
     double baseline = 0;
@@ -184,10 +185,27 @@ void World::advanceMovingMechanic() {
     for (int i = 0; i < people.size(); ++i) {
         double num = generator.rng(0, baseline);
         for (int j = 0; j < probabilities.size(); ++j) {
-            if (j == 0 && num < probabilities[j])
-                cities[j].adults.emplace_back(people[i]);
-            else if (probabilities[j - 1] < num && probabilities[j] >= num)
-                cities[j].adults.emplace_back(people[i]);
+            if (j == 0 && num < probabilities[j]) {
+                if(people[i].second != j)
+                    cities[j].adults.emplace_back(people[i].first);
+                else {
+                    unsigned x = people[i].second;
+                    while(x != people[i].second)
+                        x = int(generator.rng(0,cities.size()-1));
+                    cities[x].adults.emplace_back(people[i].first);
+                }
+            }
+                
+            else if (probabilities[j - 1] < num && probabilities[j] >= num) {
+                if(people[i].second != j)
+                    cities[j].adults.emplace_back(people[i].first);
+                else {
+                    unsigned x = people[i].second;
+                    while(x != people[i].second)
+                        x = int(generator.rng(0,cities.size()-1));
+                    cities[x].adults.emplace_back(people[i].first);
+                }
+            }
         }
     }
     

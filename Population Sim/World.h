@@ -15,10 +15,9 @@ private:
     vector <City> cities;
     vector <pair<double, double>> cityCenters;
     
-    double alpha, beta, c0, moving, averageFitness, avgAgeOfDeath, numInfluencesCalculations;
+    double alpha, beta, c0, moving, averageFitness, avgAgeOfDeath, numInfluencesCalculations, avgDistBtwn2Points;
     unsigned int date, totalPopulation, numberOfDeaths;
-    double avgDistBtwn2Points;
-    
+
     void writeFile();
     void addData();
     void advanceAge();

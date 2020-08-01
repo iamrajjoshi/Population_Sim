@@ -6,7 +6,6 @@
 #include <vector>
 #include <fstream>
 #include <string>
-#include <utility>
 #include <random>
 #include <chrono>
 #include <functional>
@@ -14,7 +13,6 @@
 #include <numeric>
 #include <thread>
 #include <atomic>
-#include <filesystem>
 #include <mutex>
 #include <future>
 #include <queue>
@@ -34,12 +32,10 @@ public:
     vector <Person> adults;
     vector <Person> kids;
     unsigned int totalPopulation;
-    unsigned int totalAdults;
     double averageFitness;
-    double averageAdultAge;
     double lifeExpectancy;
-    City(double fitness, double age) : totalPopulation(1), totalAdults(1), averageFitness(fitness), averageAdultAge(age), lifeExpectancy(0) {};
-    City(Person p) : totalPopulation(1), totalAdults(1), averageFitness(p.fitness), averageAdultAge(p.age), lifeExpectancy(0) {
+    City(double fitness, double age) : totalPopulation(1), averageFitness(fitness), lifeExpectancy(0) {};
+    City(Person p) : totalPopulation(1), averageFitness(p.fitness), lifeExpectancy(0) {
         adults.push_back(p);
     };
 };

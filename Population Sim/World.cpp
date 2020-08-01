@@ -6,7 +6,6 @@ void World::initializeSimulation() {
     date = 0;
     avgAgeOfDeath = 0;
     numberOfDeaths = 0;
-    averageFitness = 0;
     numInfluencesCalculations = 0;
     avgDistBtwn2Points = 0;
     pair<unsigned int, unsigned int> p(generator.spawnFirstImmigrant());

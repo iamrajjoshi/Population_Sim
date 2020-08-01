@@ -21,8 +21,8 @@ int main() {
         double alpha, beta, birthrate, constant_of_influence,  immigration_rate, dim,  moving;
         myfile >> alpha >> beta >> birthrate >> constant_of_influence >> immigration_rate >> dim >> moving;
         
-        string fileName = "/Users/rj/Desktop/CASE" + to_string(i+1) + ".csv";
-        futs.push_back(tp.submit(bind(&simRunner, i, alpha, beta, birthrate, constant_of_influence, immigration_rate, dim, moving, fileName, 40)));
+        string fileName = "/Users/rj/Desktop/CASE" + to_string(i+2) + ".csv";
+        futs.push_back(tp.submit(bind(&simRunner, i, alpha, beta, birthrate, constant_of_influence, immigration_rate, dim, moving, fileName, 150)));
     }
     myfile.close();
     

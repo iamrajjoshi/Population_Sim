@@ -34,17 +34,12 @@ public:
     vector <Person> adults;
     vector <Person> kids;
     unsigned int totalPopulation;
-    unsigned int totalKids;
     unsigned int totalAdults;
     double averageFitness;
     double averageAdultAge;
-    double averageKidAge;
-    double lifeexpectancy;
-    double totalDeaths = 0;
-    double cityAgeofDeath = 0;
-    int AODcity = 0;
-    City(double fitness, double age) : totalPopulation(1), totalKids(0), totalAdults(1), averageFitness(fitness), averageAdultAge(age), averageKidAge(0), totalDeaths(0), cityAgeofDeath(0), AODcity(0), lifeexpectancy(0) {};
-    City(Person p) : totalPopulation(1), totalKids(0), totalAdults(1), averageFitness(p.fitness), averageAdultAge(p.age), averageKidAge(0), lifeexpectancy(0) {
+    double lifeExpectancy;
+    City(double fitness, double age) : totalPopulation(1), totalAdults(1), averageFitness(fitness), averageAdultAge(age), lifeExpectancy(0) {};
+    City(Person p) : totalPopulation(1), totalAdults(1), averageFitness(p.fitness), averageAdultAge(p.age), lifeExpectancy(0) {
         adults.push_back(p);
     };
 };

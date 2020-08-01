@@ -8,18 +8,17 @@ class World {
 private:
     ofstream outFile;
     string outFileName;
-    vector <string> data;
+    
     Immigrant_Generator generator;
+    
+    vector <string> data;
     vector <City> cities;
     vector <pair<double, double>> cityCenters;
-    double alpha;
-    double beta;
-    double c0;
-    double moving;
-    unsigned int date;
-    unsigned int totalCities;
-    unsigned int totalPopulation;
-    double averageFitness;
+    
+    double alpha, beta, c0, moving, averageFitness, avgAgeOfDeath, numInfluencesCalculations;
+    unsigned int date, totalPopulation, numberOfDeaths;
+    double avgDistBtwn2Points;
+    
     void writeFile();
     void addData();
     void advanceAge();
@@ -30,8 +29,7 @@ private:
     unsigned int calculateLifeExpectancy(unsigned int);
     long double calculateInfluence(unsigned int, pair<double, double>point);
     void initializeSimulation();
-    unsigned int ac,caod,totalkids;
-    double aod, r[2]={0,0};
+   
 public:
      //alpha, beta, birthrate, constant of influence rate of immigration dimensions moving mechanic
     World(double,double, double, double, unsigned int, unsigned int, double, string);

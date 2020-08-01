@@ -160,12 +160,12 @@ void World::advanceFitness() {
 }
 
 void World::advanceMovingMechanic() {
-    vector<pair<Person, unsigned int>> people;
+    vector<pair<Person,int>> people;
 
     for (int i = 0; i < cities.size(); ++i) {
            for (int j = 0; j < cities[i].adults.size(); ++j) {
-               if (cities[i].adults[j].fitness * (1 + (moving / 100)) < averageFitness) {
-                   people.push_back(make_pair(cities[i].adults[j], j));
+               if (cities[i].adults[j].fitness * (1 + (moving / 100)) > averageFitness) {
+                   people.push_back(make_pair(cities[i].adults[j], i));
                    cities[i].adults.erase(cities[i].adults.begin() + j);
                    j--;
                }
@@ -197,7 +197,7 @@ void World::advanceMovingMechanic() {
             }
                 
             else if (probabilities[j - 1] < num && probabilities[j] >= num) {
-                if(people[i].second != j)
+                if(people[i].second != (j-1))
                     cities[j].adults.emplace_back(people[i].first);
                 else {
                     unsigned x = people[i].second;

@@ -1,9 +1,9 @@
-#ifndef Immigrant_Generator_h
-#define Immigrant_Generator_h
+#ifndef Random_h
+#define Random_h
 
 #include "Common.h"
 
-class Immigrant_Generator {
+class Random {
 private:
     double c;
     unsigned int dim;
@@ -13,10 +13,10 @@ public:
     unsigned int getDim();
     double birthrate;
     double kidProbability();
-    Immigrant_Generator(double, unsigned int, double);
+    Random(double, unsigned int, double);
     vector <pair<double, double>> spawnImmigrants();
     pair <double, double> spawnFirstImmigrant();
-    double rng(double, double);
+    double generate(double, double);
 };
 
 #endif

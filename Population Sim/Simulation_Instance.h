@@ -2,14 +2,34 @@
 #define World_h
 
 #include "Common.h"
-#include "Immigrant_Generator.h"
+#include "Random.h"
 
-class World {
+class Person {
+private:
+    unsigned int age;
+    unsigned int fitness;
+    Person(unsigned int age, unsigned int fitness) : age(age), fitness(fitness) {};
+    friend class City;
+    friend class Simulation_Instance;
+};
+
+class City {
+private:
+    vector <Person> adults;
+    vector <Person> kids;
+    unsigned int totalPopulation;
+    double averageFitness;
+    double lifeExpectancy;
+    City(Person p) : totalPopulation(1), averageFitness(p.fitness), lifeExpectancy(0) { adults.push_back(p); };
+    friend class Simulation_Instance;
+};
+
+class Simulation_Instance {
 private:
     ofstream outFile;
     string outFileName;
     
-    Immigrant_Generator generator;
+    Random generator;
     
     vector <string> data;
     vector <City> cities;
@@ -31,7 +51,7 @@ private:
    
 public:
      //alpha, beta, birthrate, constant of influence rate of immigration dimensions moving mechanic
-    World(double,double, double, double, unsigned int, unsigned int, double, string);
+    Simulation_Instance(double,double, double, double, unsigned int, unsigned int, double, string);
     void simulate(unsigned int);
 };
 

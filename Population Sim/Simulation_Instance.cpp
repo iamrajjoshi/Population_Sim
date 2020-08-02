@@ -1,8 +1,8 @@
-#include "World.h"
+#include "Simulation_Instance.h"
 
-World::World(double alpha, double beta, double birthrate, double constant_of_influence, unsigned int immigration_rate, unsigned int dim, double moving, string fileName) : generator(immigration_rate, dim, birthrate), alpha(alpha), beta(beta), c0(constant_of_influence), moving(moving), outFileName(fileName) {};
+Simulation_Instance::Simulation_Instance(double alpha, double beta, double birthrate, double constOfInfluence, unsigned int immigrationRate, unsigned int dim, double moving, string fileName) : generator(immigrationRate, dim, birthrate), alpha(alpha), beta(beta), c0(constOfInfluence), moving(moving), outFileName(fileName) {};
 
-void World::initializeSimulation() {
+void Simulation_Instance::initializeSimulation() {
     date = 0;
     avgAgeOfDeath = 0;
     numberOfDeaths = 0;
@@ -10,15 +10,14 @@ void World::initializeSimulation() {
     avgDistBtwn2Points = 0;
     pair<unsigned int, unsigned int> p(generator.spawnFirstImmigrant());
     cityCenters.push_back(p);
-    Person person(18, calculateFitness(18));
-    cities.push_back(person);
+    cities.push_back(Person(18, calculateFitness(18)));
     totalPopulation = 1;
-    averageFitness = person.fitness;
+    averageFitness = cities[0].averageFitness;
     calculateLifeExpectancy(0);
     return;
 }
 
-void World::advanceAge() {
+void Simulation_Instance::advanceAge() {
     //increase age and transfer kids to adults
     for (int i = 0; i < cities.size(); ++i) {
         for (int j = 0; j < cities[i].adults.size(); ++j)//increment adult age
@@ -52,14 +51,14 @@ void World::advanceAge() {
     return;
 }
 
-unsigned int World::calculateLifeExpectancy(unsigned int index) {
+unsigned int Simulation_Instance::calculateLifeExpectancy(unsigned int index) {
     double y = (double(cities[index].averageFitness) / this->averageFitness) - 0.3;
     double output = roundl(114 * exp(y) / (exp(y) + 1));
     cities[index].lifeExpectancy = output;
     return output;
 }
 
-void World::advanceImmigrantMechanic() {
+void Simulation_Instance::advanceImmigrantMechanic() {
     //assigning immigrants to a city
     vector <pair<double, double>> immigrants(generator.spawnImmigrants());
     for (int i = 0; i < immigrants.size(); ++i) {
@@ -70,23 +69,17 @@ void World::advanceImmigrantMechanic() {
         
         long double total_influence = accumulate(influences.begin(), influences.end(), 0.0);
         total_influence += 1/total_influence;
-        if (isnan(total_influence)) {
-            cout << "ERROR: TOTAL INFLUENCE IS NAN" << endl;
-            cout << "WRITING CURRENT DATA TO: " << this->outFileName << endl;
-            writeFile();
-            return;
-        }
+       
         
         vector<long double> probabilities(cities.size() + 1, 0);
         for(int j = 1; j < probabilities.size(); ++j)
             probabilities[j] = probabilities[j-1] + (influences[j-1])/total_influence;
         
-        long double num = generator.rng(0, probabilities[probabilities.size()-1]+(long double)1/total_influence);
+        long double num = generator.generate(0, probabilities[probabilities.size()-1]+(long double)1/total_influence);
         
         if (num > probabilities[probabilities.size() - 1]) {
-            cities.push_back(City(calculateFitness(18), 18));
+            cities.push_back(Person(18, calculateFitness(18)));
             cityCenters.push_back(immigrants[i]);
-            cities[cities.size() - 1].adults.emplace_back(Person(18, 31));
         }
         
         else
@@ -100,7 +93,7 @@ void World::advanceImmigrantMechanic() {
     return;
 }
 
-long double World::calculateInfluence(unsigned int index, pair<double, double> point) {
+long double Simulation_Instance::calculateInfluence(unsigned int index, pair<double, double> point) {
     long double d = sqrt(pow((this->cityCenters[index].first - point.first), 2) + pow((this->cityCenters[index].second - point.second), 2));
     avgDistBtwn2Points = (avgDistBtwn2Points * numInfluencesCalculations + d) / (numInfluencesCalculations + 1);
     numInfluencesCalculations++;
@@ -108,14 +101,13 @@ long double World::calculateInfluence(unsigned int index, pair<double, double> p
     return influence;
 }
 
-unsigned int World::calculateFitness(unsigned int age) {
-    double temp = age;
-    double d = -((temp - 45) * (temp - 45)) / 625;//-(pow(age - 45,2)) / 625
+unsigned int Simulation_Instance::calculateFitness(unsigned int age) {
+    double d = -((double(age) - 45) * ((double(age) - 45)) / 625);
     double output = 100 * exp(d);
     return floor(output);
 }
 
-void World::advanceFitness() {
+void Simulation_Instance::advanceFitness() {
     for (int i = 0; i < cities.size(); ++i) {
         for (int j = 0; j < cities[i].adults.size(); ++j)//increment adult fitness
             cities[i].adults[j].fitness = calculateFitness(cities[i].adults[j].age);
@@ -140,7 +132,7 @@ void World::advanceFitness() {
     return;
 }
 
-void World::advanceMovingMechanic() {
+void Simulation_Instance::advanceMovingMechanic() {
     vector<pair<Person,unsigned int>> people;
 
     for (int i = 0; i < cities.size(); ++i) {
@@ -150,7 +142,6 @@ void World::advanceMovingMechanic() {
                    cities[i].adults.erase(cities[i].adults.begin() + j);
                    j--;
                }
-               
            }
        }
     
@@ -164,15 +155,15 @@ void World::advanceMovingMechanic() {
     }
     
     for (int i = 0; i < people.size(); ++i) {
-        double num = generator.rng(0, baseline);
+        double num = generator.generate(0, baseline);
         for (int j = 0; j < probabilities.size(); ++j) {
             if (j == 0 && num < probabilities[j]) {
                 if(people[i].second != j)
                     cities[j].adults.emplace_back(people[i].first);
                 else {
-                    unsigned x = people[i].second;
+                    unsigned int x = people[i].second;
                     while(x != people[i].second)
-                        x = int(generator.rng(0,cities.size()-1));
+                        x = (unsigned int)generator.generate(0,cities.size()-1);
                     cities[x].adults.emplace_back(people[i].first);
                 }
             }
@@ -181,9 +172,9 @@ void World::advanceMovingMechanic() {
                 if(people[i].second != (j-1))
                     cities[j].adults.emplace_back(people[i].first);
                 else {
-                    unsigned x = people[i].second;
+                    unsigned int x = people[i].second;
                     while(x != people[i].second)
-                        x = int(generator.rng(0,cities.size()-1));
+                        x = (unsigned int)generator.generate(0,cities.size()-1);
                     cities[x].adults.emplace_back(people[i].first);
                 }
             }
@@ -200,7 +191,7 @@ void World::advanceMovingMechanic() {
 }
 
 
-void World::simulate(unsigned int count) {
+void Simulation_Instance::simulate(unsigned int count) {
     initializeSimulation();
     addData();
     for (int i = 0; i < count; ++i) {
@@ -215,7 +206,7 @@ void World::simulate(unsigned int count) {
     return;
 }
 
-void World::addData() {
+void Simulation_Instance::addData() {
     string temp;
     temp += to_string(this->date) + ",";
     temp += to_string(this->cities.size()) + ",";
@@ -233,13 +224,13 @@ void World::addData() {
     data.push_back(temp);
 }
 
-void World::writeFile() {
+void Simulation_Instance::writeFile() {
     outFile.open(outFileName);
     //generator(immigration_rate, dim, birthrate), a(alpha), b(beta), c0(constant_of_influence), moving(moving), outFileName(fileName)
     //w(alpha, beta, birthrate, constant_of_influence, immigration_rate, dim, m, fileName)
     string inputs = "Alpha,Beta,Birthrate,Constant of Influence, Immigration Rate, Dimensions, Moving Rate\n";
     inputs += to_string(this->alpha) + "," + to_string(this->beta) + "," + to_string(this->generator.birthrate) + "," + to_string(this->c0) + "," + to_string(this->generator.getC()) + "," + to_string(this->generator.getDim()) + "," +  to_string(this->moving) + "\n";
-    string temp = "Date,Total Cities,Total Population,Average Fitness,Average Age of Death,Average Distance Between 2 Cities,";
+    string temp = "Date,Total Cities,Total Population,Average Fitness,Average Age of Death,Average Distance Between 2 Points,";
     for (int i = 0; i < cities.size(); ++i)
         temp += "City ID,Total Population,Average Fitness,Life Expectancy,";
     

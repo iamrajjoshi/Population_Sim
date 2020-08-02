@@ -1,8 +1,8 @@
-#include "Simulation_Instance.h"
+#include "World.h"
 
-Simulation_Instance::Simulation_Instance(double alpha, double beta, double birthrate, double constOfInfluence, unsigned int immigrationRate, unsigned int dim, double moving, string fileName) : generator(immigrationRate, dim, birthrate), alpha(alpha), beta(beta), c0(constOfInfluence), moving(moving), outFileName(fileName) {};
+World::World(double alpha, double beta, double birthrate, double constOfInfluence, unsigned int immigrationRate, unsigned int dim, double moving, string fileName) : generator(immigrationRate, dim, birthrate), alpha(alpha), beta(beta), c0(constOfInfluence), moving(moving), outFileName(fileName) {};
 
-void Simulation_Instance::initializeSimulation() {
+void World::initializeSimulation() {
     date = 0;
     avgAgeOfDeath = 0;
     numberOfDeaths = 0;
@@ -17,7 +17,7 @@ void Simulation_Instance::initializeSimulation() {
     return;
 }
 
-void Simulation_Instance::advanceAge() {
+void World::advanceAge() {
     //increase age and transfer kids to adults
     for (int i = 0; i < cities.size(); ++i) {
         for (int j = 0; j < cities[i].adults.size(); ++j)//increment adult age
@@ -51,14 +51,14 @@ void Simulation_Instance::advanceAge() {
     return;
 }
 
-unsigned int Simulation_Instance::calculateLifeExpectancy(unsigned int index) {
+unsigned int World::calculateLifeExpectancy(unsigned int index) {
     double y = (double(cities[index].averageFitness) / this->averageFitness) - 0.3;
     double output = roundl(114 * exp(y) / (exp(y) + 1));
     cities[index].lifeExpectancy = output;
     return output;
 }
 
-void Simulation_Instance::advanceImmigrantMechanic() {
+void World::advanceImmigrantMechanic() {
     //assigning immigrants to a city
     vector <pair<double, double>> immigrants(generator.spawnImmigrants());
     for (int i = 0; i < immigrants.size(); ++i) {
@@ -93,7 +93,7 @@ void Simulation_Instance::advanceImmigrantMechanic() {
     return;
 }
 
-long double Simulation_Instance::calculateInfluence(unsigned int index, pair<double, double> point) {
+long double World::calculateInfluence(unsigned int index, pair<double, double> point) {
     long double d = sqrt(pow((this->cityCenters[index].first - point.first), 2) + pow((this->cityCenters[index].second - point.second), 2));
     avgDistBtwn2Points = (avgDistBtwn2Points * numInfluencesCalculations + d) / (numInfluencesCalculations + 1);
     numInfluencesCalculations++;
@@ -101,13 +101,13 @@ long double Simulation_Instance::calculateInfluence(unsigned int index, pair<dou
     return influence;
 }
 
-unsigned int Simulation_Instance::calculateFitness(unsigned int age) {
+unsigned int World::calculateFitness(unsigned int age) {
     double d = -((double(age) - 45) * ((double(age) - 45)) / 625);
     double output = 100 * exp(d);
     return floor(output);
 }
 
-void Simulation_Instance::advanceFitness() {
+void World::advanceFitness() {
     for (int i = 0; i < cities.size(); ++i) {
         for (int j = 0; j < cities[i].adults.size(); ++j)//increment adult fitness
             cities[i].adults[j].fitness = calculateFitness(cities[i].adults[j].age);
@@ -132,7 +132,7 @@ void Simulation_Instance::advanceFitness() {
     return;
 }
 
-void Simulation_Instance::advanceMovingMechanic() {
+void World::advanceMovingMechanic() {
     vector<pair<Person,unsigned int>> people;
 
     for (int i = 0; i < cities.size(); ++i) {
@@ -191,7 +191,7 @@ void Simulation_Instance::advanceMovingMechanic() {
 }
 
 
-void Simulation_Instance::simulate(unsigned int count) {
+void World::simulate(unsigned int count) {
     initializeSimulation();
     addData();
     for (int i = 0; i < count; ++i) {
@@ -206,7 +206,7 @@ void Simulation_Instance::simulate(unsigned int count) {
     return;
 }
 
-void Simulation_Instance::addData() {
+void World::addData() {
     string temp;
     temp += to_string(this->date) + ",";
     temp += to_string(this->cities.size()) + ",";
@@ -224,7 +224,7 @@ void Simulation_Instance::addData() {
     data.push_back(temp);
 }
 
-void Simulation_Instance::writeFile() {
+void World::writeFile() {
     outFile.open(outFileName);
     //generator(immigration_rate, dim, birthrate), a(alpha), b(beta), c0(constant_of_influence), moving(moving), outFileName(fileName)
     //w(alpha, beta, birthrate, constant_of_influence, immigration_rate, dim, m, fileName)

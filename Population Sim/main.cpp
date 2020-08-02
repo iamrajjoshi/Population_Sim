@@ -1,9 +1,9 @@
-#include "Simulation_Instance.h"
+#include "World.h"
 #include "Threadpool.h"
 
 void simRunner(int i, double alpha, double beta, double birthrate, double constOfInfluence, unsigned int immigrationRate, unsigned int dim, double moving, string fileName, unsigned int repeat) {
     cout << "Case " << i << " running..." << endl;
-    Simulation_Instance sim(alpha, beta, birthrate, constOfInfluence, immigrationRate, dim, moving, fileName);
+    World sim(alpha, beta, birthrate, constOfInfluence, immigrationRate, dim, moving, fileName);
     sim.simulate(repeat);
     cout << "Case " << i << " completed!" << endl;
     return;

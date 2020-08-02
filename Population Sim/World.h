@@ -10,7 +10,7 @@ private:
     unsigned int fitness;
     Person(unsigned int age, unsigned int fitness) : age(age), fitness(fitness) {};
     friend class City;
-    friend class Simulation_Instance;
+    friend class World;
 };
 
 class City {
@@ -21,10 +21,10 @@ private:
     double averageFitness;
     double lifeExpectancy;
     City(Person p) : totalPopulation(1), averageFitness(p.fitness), lifeExpectancy(0) { adults.push_back(p); };
-    friend class Simulation_Instance;
+    friend class World;
 };
 
-class Simulation_Instance {
+class World {
 private:
     ofstream outFile;
     string outFileName;
@@ -51,7 +51,7 @@ private:
    
 public:
      //alpha, beta, birthrate, constant of influence rate of immigration dimensions moving mechanic
-    Simulation_Instance(double,double, double, double, unsigned int, unsigned int, double, string);
+    World(double,double, double, double, unsigned int, unsigned int, double, string);
     void simulate(unsigned int);
 };
 

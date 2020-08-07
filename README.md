@@ -16,4 +16,4 @@ We create a simulation modeling population growth, building upon the work of D J
 
 **[Link to Paper](/assets/NHSJS.pdf)** 
 
-**Published in the Internationl Journal of Scientific Research and Engineering Trends**: [Link](https://ijsret.com/wp-content/uploads/2020/07/IJSRET_V6_issue4_547.pdf)
+**Published in the International Journal of Scientific Research and Engineering Trends**: [Link](https://ijsret.com/wp-content/uploads/2020/07/IJSRET_V6_issue4_547.pdf)

@@ -1,9 +1,11 @@
+
 #ifndef World_h
 #define World_h
 
 #include "Common.h"
 #include "Random.h"
 
+//Class person used to store characteristics of individual people
 class Person {
 private:
     unsigned int age;
@@ -13,6 +15,7 @@ private:
     friend class World;
 };
 
+//Class person used to store characteristics of individual cities
 class City {
 private:
     vector <Person> adults;
@@ -24,6 +27,8 @@ private:
     friend class World;
 };
 
+//Class World using functions defined in main.cpp
+//Stores cahracteristics of entire simulation and is the overarching class
 class World {
 private:
     ofstream outFile;

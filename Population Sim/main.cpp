@@ -9,7 +9,7 @@ void simRunner(int i, double alpha, double beta, double birthrate, double constO
     return;
 }
 
-int main() {
+int main() { //main function: takes inputs and outputs data to csv file
     //alpha, beta, birthrate, constant of influence, rate of immigration, dimensions, moving mechanic
     thread_pool tp;
     vector<future<void>> futs;

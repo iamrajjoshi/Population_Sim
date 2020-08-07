@@ -2,7 +2,7 @@
 
 World::World(double alpha, double beta, double birthrate, double constOfInfluence, unsigned int immigrationRate, unsigned int dim, double moving, string fileName) : generator(immigrationRate, dim, birthrate), alpha(alpha), beta(beta), c0(constOfInfluence), moving(moving), outFileName(fileName) {};
 
-void World::initializeSimulation() {
+void World::initializeSimulation() { //initialize the sumlation with 1 person spwaning at a random location and creating their own city
     date = 0;
     avgAgeOfDeath = 0;
     numberOfDeaths = 0;
@@ -17,7 +17,7 @@ void World::initializeSimulation() {
     return;
 }
 
-void World::advanceAge() {
+void World::advanceAge() { //andvance the year for all the people within the simulation
     //increase age and transfer kids to adults
     for (int i = 0; i < cities.size(); ++i) {
         for (int j = 0; j < cities[i].adults.size(); ++j)//increment adult age
@@ -35,12 +35,12 @@ void World::advanceAge() {
         for (int j = 0; j < cities[i].adults.size(); ++j) {//birth & death
             if (cities[i].adults[j].age == 30) {
                 int it = generator.birthrate / 1;
-                for (int uu = 0; uu < it; uu++)
+                for (int uu = 0; uu < it; uu++) // birth of new kids
                     cities[i].kids.push_back(Person(0, 0));
                 if (generator.kidProbability() < generator.birthrate - it)
                     cities[i].kids.push_back(Person(0, 0));
             }
-            if (cities[i].adults[j].age > calculateLifeExpectancy(i)) {
+            if (cities[i].adults[j].age > calculateLifeExpectancy(i)) { //death of anyone ove their repective life expectancy
                 avgAgeOfDeath = double((avgAgeOfDeath * numberOfDeaths + cities[i].adults[j].age)) / (numberOfDeaths + 1);
                 numberOfDeaths++;
                 cities[i].adults.erase(cities[i].adults.begin() + j);
@@ -51,7 +51,7 @@ void World::advanceAge() {
     return;
 }
 
-unsigned int World::calculateLifeExpectancy(unsigned int index) {
+unsigned int World::calculateLifeExpectancy(unsigned int index) { //calculate the life expectancy of a city
     double y = (double(cities[index].averageFitness) / this->averageFitness) - 0.3;
     double output = roundl(114 * exp(y) / (exp(y) + 1));
     cities[index].lifeExpectancy = output;
@@ -61,10 +61,10 @@ unsigned int World::calculateLifeExpectancy(unsigned int index) {
 void World::advanceImmigrantMechanic() {
     //assigning immigrants to a city
     vector <pair<double, double>> immigrants(generator.spawnImmigrants());
-    for (int i = 0; i < immigrants.size(); ++i) {
+    for (int i = 0; i < immigrants.size(); ++i) { //for each immigrant:
         
         vector<long double> influences;
-        for (int j = 0; j < this->cities.size(); ++j)
+        for (int j = 0; j < this->cities.size(); ++j) //calculate the influence of every city on the immigrant
             influences.push_back(calculateInfluence(j, immigrants[i]));
         
         long double total_influence = accumulate(influences.begin(), influences.end(), 0.0);
@@ -72,18 +72,18 @@ void World::advanceImmigrantMechanic() {
        
         
         vector<long double> probabilities(cities.size() + 1, 0);
-        for(int j = 1; j < probabilities.size(); ++j)
+        for(int j = 1; j < probabilities.size(); ++j) //create a vector with size of total_influence and ranges based on they influence of a city
             probabilities[j] = probabilities[j-1] + (influences[j-1])/total_influence;
         
         long double num = generator.generate(0, probabilities[probabilities.size()-1]+(long double)1/total_influence);
         
-        if (num > probabilities[probabilities.size() - 1]) {
+        if (num > probabilities[probabilities.size() - 1]) { //if the random value falls within the last range and the immigrant starts a new city
             cities.push_back(Person(18, calculateFitness(18)));
             cityCenters.push_back(immigrants[i]);
         }
         
-        else
-            for (int j = 1; j < probabilities.size(); ++j)
+        else //if the immigrant is assigned to an existing city
+            for (int j = 1; j < probabilities.size(); ++j) //assign immigrant to the city with the range for which the random value fell between
                 if (probabilities[j - 1] < num && probabilities[j] >= num) {
                     cities[j - 1].adults.emplace_back(Person(18, 31));
                     break;
@@ -93,7 +93,7 @@ void World::advanceImmigrantMechanic() {
     return;
 }
 
-long double World::calculateInfluence(unsigned int index, pair<double, double> point) {
+long double World::calculateInfluence(unsigned int index, pair<double, double> point) { //calculate influence of a city on an immigrant
     long double d = sqrt(pow((this->cityCenters[index].first - point.first), 2) + pow((this->cityCenters[index].second - point.second), 2));
     avgDistBtwn2Points = (avgDistBtwn2Points * numInfluencesCalculations + d) / (numInfluencesCalculations + 1);
     numInfluencesCalculations++;
@@ -101,19 +101,21 @@ long double World::calculateInfluence(unsigned int index, pair<double, double> p
     return influence;
 }
 
-unsigned int World::calculateFitness(unsigned int age) {
+unsigned int World::calculateFitness(unsigned int age) { //calculate fitness of a person
     double d = -((double(age) - 45) * ((double(age) - 45)) / 625);
     double output = 100 * exp(d);
     return floor(output);
 }
 
-void World::advanceFitness() {
+void World::advanceFitness() { //update the individual, city, and world fitnesses as the simulation progresses to a new year
     for (int i = 0; i < cities.size(); ++i) {
+        //update individual fitness
         for (int j = 0; j < cities[i].adults.size(); ++j)//increment adult fitness
             cities[i].adults[j].fitness = calculateFitness(cities[i].adults[j].age);
         for (int j = 0; j < cities[i].kids.size(); ++j)//increment kids fitness
             cities[i].kids[j].fitness = calculateFitness(cities[i].kids[j].age);
         
+        //update city fitness
         cities[i].averageFitness = 0;
         for (int j = 0; j < cities[i].adults.size(); ++j)
             cities[i].averageFitness += cities[i].adults[j].fitness;
@@ -121,6 +123,7 @@ void World::advanceFitness() {
         else cities[i].averageFitness = cities[i].averageFitness / cities[i].adults.size();
     }
     
+    //update world fitness
     this->averageFitness = 0;
     unsigned int activeCities = 0;
     for (int j = 0; j < cities.size(); ++j)
@@ -132,12 +135,12 @@ void World::advanceFitness() {
     return;
 }
 
-void World::advanceMovingMechanic() {
+void World::advanceMovingMechanic() { //Progress the simulation such that people who meet the required condition move to a differenct city
     vector<pair<Person,unsigned int>> people;
 
     for (int i = 0; i < cities.size(); ++i) {
            for (int j = 0; j < cities[i].adults.size(); ++j) {
-               if (cities[i].adults[j].fitness * (1 + (moving / 100)) > averageFitness) {
+               if (cities[i].adults[j].fitness * (1 + (moving / 100)) > averageFitness) { //create a vector with the people moving to a new city
                    people.push_back(make_pair(cities[i].adults[j], i));
                    cities[i].adults.erase(cities[i].adults.begin() + j);
                    j--;
@@ -148,13 +151,13 @@ void World::advanceMovingMechanic() {
     vector<double> probabilities(cities.size(), 0);
     double baseline = 0;
     
-    for (int j = 0; j < cities.size(); ++j) {
+    for (int j = 0; j < cities.size(); ++j) { //similar to immigrant mechanic, create a vector with ranges depending on the probability that a person moves to that city
         double temp = cities[j].averageFitness / averageFitness / cities.size();
         baseline += temp;
         probabilities[j] = baseline;
     }
     
-    for (int i = 0; i < people.size(); ++i) {
+    for (int i = 0; i < people.size(); ++i) { //assign all the people moving to a new city
         double num = generator.generate(0, baseline);
         for (int j = 0; j < probabilities.size(); ++j) {
             if (j == 0 && num < probabilities[j]) {
@@ -181,7 +184,7 @@ void World::advanceMovingMechanic() {
         }
     }
     
-    for (int i = 0; i < cities.size(); ++i)
+    for (int i = 0; i < cities.size(); ++i) //update city total population
         cities[i].totalPopulation = (unsigned int)(cities[i].adults.size() + cities[i].kids.size());
     
     this->totalPopulation = 0;
@@ -191,7 +194,7 @@ void World::advanceMovingMechanic() {
 }
 
 
-void World::simulate(unsigned int count) {
+void World::simulate(unsigned int count) { //function that progresses to a new year for an inputted number of years
     initializeSimulation();
     addData();
     for (int i = 0; i < count; ++i) {
@@ -206,7 +209,7 @@ void World::simulate(unsigned int count) {
     return;
 }
 
-void World::addData() {
+void World::addData() { //output calculated values/data to a csv file
     string temp;
     temp += to_string(this->date) + ",";
     temp += to_string(this->cities.size()) + ",";
@@ -224,7 +227,7 @@ void World::addData() {
     data.push_back(temp);
 }
 
-void World::writeFile() {
+void World::writeFile() { //write data to csv file in readable format
     outFile.open(outFileName);
     //generator(immigration_rate, dim, birthrate), a(alpha), b(beta), c0(constant_of_influence), moving(moving), outFileName(fileName)
     //w(alpha, beta, birthrate, constant_of_influence, immigration_rate, dim, m, fileName)

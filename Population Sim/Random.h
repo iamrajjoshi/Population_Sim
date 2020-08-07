@@ -3,6 +3,7 @@
 
 #include "Common.h"
 
+//Class random with functions defined in random.cpp
 class Random {
 private:
     double c;
